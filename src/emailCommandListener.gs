@@ -3,7 +3,9 @@
  * given name.
  *
  * @param message: name of a label
- * @type  message: GmailLabel
+ * @type  message: String
+ * @return: the specified label instance
+ * @rtype: GmailLabel
  */
 function getLabel(name) {
   var label = GmailApp.getUserLabelByName(name);
@@ -11,13 +13,13 @@ function getLabel(name) {
     return label;
   }
   
-  label = GmailApp.createLabel(name);
+  return GmailApp.createLabel(name);
 }
 
 /*
  * Creates a folder and its contents based on the contents of a "Confirm Order" command message.
  *
- * @param message: command message
+ * @param message: the command message
  * @type  message: GmailMessage
  */
 function cmdConfirmOrder(message) {
