@@ -5,6 +5,8 @@
  * @type  name: String
  * @param invalid: an invalid value for the cell
  * @type  invalid: Object
+ * @return: the cell value
+ * @rtype: Object
  */
 function getValue(spreadsheet, ui, name, invalid) {
   var range = spreadsheet.getRangeByName(name);
@@ -31,6 +33,8 @@ function getValue(spreadsheet, ui, name, invalid) {
  * @type  customerCode: String
  * @param projectName: project name associated with the order
  * @type  projectName: String
+ * @return: the generated name
+ * @rtype: String
  */
 function getName(orderNum, customerCode, projectName) {
   var originalName = Utilities.formatString('PO %d %s %s', orderNum, customerCode, projectName);
