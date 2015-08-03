@@ -72,7 +72,7 @@ function cmdConfirmOrder(message) {
   }
 
   // create the PO file
-  var templateName = 'PO Template 模板';
+  var templateName = 'PO Template 模板测试';
   var templates = DriveApp.getFilesByName(templateName);
   if (!templates.hasNext()) {
     Logger.log(
