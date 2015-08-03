@@ -18,7 +18,7 @@ function getValue(spreadsheet, ui, name, invalid) {
   }
   
   var value = range.getValue();
-  if (value == invalid || value == null) {
+  if (value === invalid || value == null) {
     ui.alert('Invalid order spreadsheet: bad value for "' + name + '".');
     return null;
   }

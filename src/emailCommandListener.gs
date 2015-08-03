@@ -78,25 +78,60 @@ function cmdConfirmOrder(message) {
     Logger.log(
       'ERROR: Could not find a file named "%s". Skipping this step.', 
       templateName);
-    return;
+  }
+  else {
+    var template = templates.next();
+    var file = template.makeCopy(name, folder);
+    var spreadsheet = SpreadsheetApp.open(file);
+
+    // set the PO file ID value
+    var rangeName = 'orderFileId';
+    var range = spreadsheet.getRangeByName(rangeName);
+    if (range == null) {
+      Logger.log(
+        'ERROR: Could not find named range "%s". Skipping this step.', 
+        rangeName);
+    }
+    else {
+      range.setValue(fileId);
+    }
   }
 
-  var template = templates.next();
-  var file = template.makeCopy(name, folder);
-  var sheetName = 'Production Order';
-  var spreadsheet = SpreadsheetApp.open(file);
-
-  // set the PO file ID value
-  var rangeName = 'orderFileId';
-  var range = spreadsheet.getRangeByName(rangeName);
-  if (range == null) {
+  // add a schedule entry
+  var scheduleName = '齐博达订单进度 Schedule';
+  var schedules = DriveApp.getFilesByName(scheduleName);
+  if (!schedules.hasNext()) {
     Logger.log(
-      'ERROR: Could not find named range "%s". Skipping this step.', 
-      rangeName);
-    return;
+      'ERROR: Could not find a file named "%s". Skipping this step.', 
+      scheduleName);
   }
-  
-  range.setValue(fileId);
+  else {
+    var schedule = schedules.next();
+    var spreadsheet = SpreadsheetApp.open(schedule);
+
+    var rangeName = 'orderFileIds';
+    var range = spreadsheet.getRangeByName(rangeName);
+    if (range == null) {
+      Logger.log(
+        'ERROR: Could not find named range "%s". Skipping this step.', 
+        rangeName);
+    }
+    else {
+      var values = range.getValues();
+      var cellIndex = 0;
+      while (cellIndex < values.length && values[cellIndex][0] !== '') {
+        cellIndex++;
+      }
+
+      if (cellIndex < values.length) {
+        var cell = range.getCell(cellIndex + 1, 1);
+        cell.setValue(fileId);
+      }
+      else {
+        Logger.log('ERROR: No empty cells available in range "%s".', rangeName);
+      }
+    }
+  }
 }
 
 /*
