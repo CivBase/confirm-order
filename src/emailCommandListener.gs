@@ -95,40 +95,41 @@ function cmdConfirmOrder(message) {
     else {
       range.setValue(fileId);
     }
-  }
 
-  // add a schedule entry
-  var scheduleName = '齐博达订单进度 Schedule';
-  var schedules = DriveApp.getFilesByName(scheduleName);
-  if (!schedules.hasNext()) {
-    Logger.log(
-      'ERROR: Could not find a file named "%s". Skipping this step.', 
-      scheduleName);
-  }
-  else {
-    var schedule = schedules.next();
-    var spreadsheet = SpreadsheetApp.open(schedule);
-
-    var rangeName = 'orderFileIds';
-    var range = spreadsheet.getRangeByName(rangeName);
-    if (range == null) {
+    // add a schedule entry
+    var scheduleName = '齐博达订单进度 Schedule';
+    var schedules = DriveApp.getFilesByName(scheduleName);
+    if (!schedules.hasNext()) {
       Logger.log(
-        'ERROR: Could not find named range "%s". Skipping this step.', 
-        rangeName);
+        'ERROR: Could not find a file named "%s". Skipping this step.', 
+        scheduleName);
     }
     else {
-      var values = range.getValues();
-      var cellIndex = 0;
-      while (cellIndex < values.length && values[cellIndex][0] !== '') {
-        cellIndex++;
-      }
+      var schedule = schedules.next();
+      var spreadsheet = SpreadsheetApp.open(schedule);
 
-      if (cellIndex < values.length) {
-        var cell = range.getCell(cellIndex + 1, 1);
-        cell.setValue(fileId);
+      var rangeName = 'orderFileIds';
+      var range = spreadsheet.getRangeByName(rangeName);
+      if (range == null) {
+        Logger.log(
+          'ERROR: Could not find named range "%s". Skipping this step.', 
+          rangeName);
       }
       else {
-        Logger.log('ERROR: No empty cells available in range "%s".', rangeName);
+        var values = range.getValues();
+        var cellIndex = 0;
+        while (cellIndex < values.length && values[cellIndex][0] !== '') {
+          cellIndex++;
+        }
+
+        if (cellIndex < values.length) {
+          var cell = range.getCell(cellIndex + 1, 1);
+          cell.setValue(file.getId());
+        }
+        else {
+          Logger.log(
+            'ERROR: No empty cells available in range "%s".', rangeName);
+        }
       }
     }
   }
