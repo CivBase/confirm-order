@@ -1,3 +1,5 @@
+// Version 1.0.0
+
 /*
  * Gets the value of a single-cell range.
  *
@@ -37,7 +39,8 @@ function getValue(spreadsheet, ui, name, invalid) {
  * @rtype: String
  */
 function getName(orderNum, customerCode, projectName) {
-  var originalName = Utilities.formatString('PO %d %s %s', orderNum, customerCode, projectName);
+  var originalName = Utilities.formatString(
+    'PO %d %s %s', orderNum, customerCode, projectName);
   var name = originalName;
   var files = DriveApp.getFilesByName(name);
   
@@ -52,8 +55,8 @@ function getName(orderNum, customerCode, projectName) {
 }
 
 /*
- * Publishes the spreadsheet by renaming it and making it sharable by link.  Also creates an
- * associated Google Drive folder and some pre-defined contents.
+ * Publishes the spreadsheet by renaming it and making it sharable by link.  
+ * Also creates an associated Google Drive folder and some pre-defined contents.
  */
 function confirmOrder() {
   var ui = SpreadsheetApp.getUi();
@@ -81,7 +84,9 @@ function confirmOrder() {
   
   // confirm dialog
   var confirm = ui.alert(
-    'Please confirm', 'Are you sure?  This action is not reversable.', ui.ButtonSet.YES_NO);
+    'Please confirm', 
+    'Are you sure?  This action is not reversable.', 
+    ui.ButtonSet.YES_NO);
   
   if (confirm == ui.Button.NO) {
     return;
@@ -95,10 +100,11 @@ function confirmOrder() {
   
   // create stuff
   var folder = DriveApp.createFolder(name);
-  folder.createFolder(Utilities.formatString('%s %s', name, 'TECH'));
-  folder.createFolder(Utilities.formatString('%s %s', name, 'SHIP'));
+  folder.addFile(file);
+  folder.createFolder(Utilities.formatString('%s - %s', 'TECH', name));
+  folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', name));
   
   // send command to production
-  var body = name;
+  var body = Utilities.formatString('%s\n%s', name, file.getId());
   GmailApp.sendEmail('production@example.com', 'CMD - Confirm Order', body);
 }

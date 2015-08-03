@@ -147,3 +147,9 @@ Select `emailCommandListener` function to run as a `Time-driven` event on a `Min
 Before the script can start executing, you must authorize the script by continuing through two more dialogs.
 
 ![authorization](https://raw.githubusercontent.com/CivBase/confirm-order/master/screenshots/23-authorization.png)
+
+## Make sure everything is in place.
+For the script to completely function, a few files and folders need to exist with the correct names in the production account's Google Drive.
+
+#### 14. Ensure all necessary files and folders are in place.
+The production Google Drive should include the documents `confirm order readme.txt` and `PO Template 模板` in the root directory as well as the folder `进行生产任务 Current Order`.  The `PO Template 模板` template file must be a Google Sheet with a sheet named `Production Order` which contains the named cell range `orderFileId`.
