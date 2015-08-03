@@ -67,7 +67,7 @@ function cmdConfirmOrder(message) {
 
   // get the PO file ID
   var fileId = '';
-  if (!body.length > 1) {
+  if (body.length > 1) {
     fileId = body[1];
   }
 
