@@ -84,17 +84,11 @@ function cmdConfirmOrder(message) {
   var template = templates.next();
   var file = template.makeCopy(name, folder);
   var sheetName = 'Production Order';
-  var sheet = SpreadsheetApp.open(file).getSheetByName(sheetName);
-  if (sheet == null) {
-    Logger.log(
-      'ERROR: Could not find sheet named "%s". Skipping this step.', 
-      sheetName);
-    return;
-  }
+  var spreadsheet = SpreadsheetApp.open(file);
 
   // set the PO file ID value
   var rangeName = 'orderFileId';
-  var range = sheet.getRangeByName(rangeName);
+  var range = spreadsheet.getRangeByName(rangeName);
   if (range == null) {
     Logger.log(
       'ERROR: Could not find named range "%s". Skipping this step.', 
