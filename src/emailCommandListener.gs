@@ -28,7 +28,7 @@ function getLabel(name) {
  */
 function cmdConfirmOrder(message) {
   // read the email message
-  var body = message.getPlainBody().split('\n')[0];
+  var body = message.getPlainBody().split('\n');
 
   // create folders
   var parentName = '进行生产任务 Current Order';

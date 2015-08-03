@@ -99,8 +99,13 @@ function confirmOrder() {
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   
   // create stuff
+  var parents = file.getParents();
   var folder = DriveApp.createFolder(name);
   folder.addFile(file);
+  while (parents.hasNext()) {
+    parents.next().removeFile(file);
+  }
+  
   folder.createFolder(Utilities.formatString('%s - %s', 'TECH', name));
   folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', name));
   
