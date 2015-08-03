@@ -82,6 +82,7 @@ function cmdConfirmOrder(message) {
   else {
     var template = templates.next();
     var file = template.makeCopy(name, folder);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
     var spreadsheet = SpreadsheetApp.open(file);
 
     // set the PO file ID value
