@@ -47,7 +47,7 @@ function getName(orderNum, customerCode, projectName) {
   var i = 0;
   while (files.hasNext()) {
     i += 1;
-    name = formatString('%s (%d)', originalName, i);
+    name = Utilities.formatString('%s (%d)', originalName, i);
     files = DriveApp.getFilesByName(name);
   }
   
@@ -105,7 +105,7 @@ function confirmOrder() {
   while (parents.hasNext()) {
     parents.next().removeFile(file);
   }
-  
+
   folder.createFolder(Utilities.formatString('%s - %s', 'TECH', name));
   folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', name));
   
