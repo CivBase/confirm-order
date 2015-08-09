@@ -1,4 +1,4 @@
-// Version 1.0.0
+// Version 1.1.0
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
@@ -30,7 +30,7 @@ function cmdConfirmOrder(message) {
   // read the email message
   var body = message.getPlainBody().split('\n');
 
-  // create folders
+  // get/create parent folder
   var parentName = '进行生产任务 Current Order';
   var parents = DriveApp.getFoldersByName(parentName);
   var parent;
@@ -44,6 +44,7 @@ function cmdConfirmOrder(message) {
     parent = DriveApp.createFolder(parentName);
   }
 
+  // create order folder structure
   var name = body[0];
   var folder = parent.createFolder(name);
   var tech = folder.createFolder(

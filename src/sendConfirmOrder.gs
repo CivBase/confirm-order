@@ -1,4 +1,4 @@
-// Version 1.0.0
+// Version 1.1.0
 
 /*
  * Gets the value of a single-cell range.
@@ -98,12 +98,23 @@ function confirmOrder() {
   file.setName(name);
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   
-  // create stuff
-  var parents = file.getParents();
-  var folder = DriveApp.createFolder(name);
+  // get/create parent folder
+  var parentName = 'Current Order';
+  var parents = DriveApp.getFoldersByName(parentName);
+  var parent;
+  if (parents.hasNext()) {
+    parent = parents.next();
+  }
+  else {
+    parent = DriveApp.createFolder(parentName);
+  }
+
+  // create order folder structure and move order file
+  var fileParents = file.getParents();
+  var folder = parent.createFolder(name);
   folder.addFile(file);
-  while (parents.hasNext()) {
-    parents.next().removeFile(file);
+  while (fileParents.hasNext()) {
+    fileParents.next().removeFile(file);
   }
 
   folder.createFolder(Utilities.formatString('%s - %s', 'TECH', name));
