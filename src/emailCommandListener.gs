@@ -45,7 +45,7 @@ function cmdConfirmOrder(message) {
   }
 
   // create order folder structure
-  var name = body[0].replace(/\s/g, '');
+  var name = body[0].replace(/\s$/, '');
   var folder = parent.createFolder(name);
   var tech = folder.createFolder(
     Utilities.formatString('%s - %s', 'TECH', name));
@@ -69,7 +69,7 @@ function cmdConfirmOrder(message) {
   // get the PO file ID
   var fileId = '';
   if (body.length > 1) {
-    fileId = body[1].replace(/\s/g, '');
+    fileId = body[1].replace(/\s$/g, '');
   }
 
   // create the PO file
