@@ -119,7 +119,7 @@ function confirmOrder() {
   if (projectName == null) {
     return;
   }
-  
+
   var quoteCols = getRange(spreadsheet, ui, 'quote');
   
   // confirm dialog
@@ -139,7 +139,7 @@ function confirmOrder() {
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   
   // get/create parent folder
-  var parentName = 'Current Order';
+  var parentName = '0 Current Order';
   var parents = DriveApp.getFoldersByName(parentName);
   var parent;
   if (parents.hasNext()) {

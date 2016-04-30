@@ -103,7 +103,7 @@ function cmdConfirmOrder(message) {
     }
 
     // add a schedule entry
-    var scheduleName = '齐博达订单进度 Schedule';
+    var scheduleName = 'Chipstar Schedule 订单进度';
     var schedules = DriveApp.getFilesByName(scheduleName);
     if (!schedules.hasNext()) {
       Logger.log(
