@@ -47,12 +47,12 @@ function cmdConfirmOrder(message) {
   // create order folder structure
   var name = body[0].replace(/\s$/, '');
 
-  var prName = name.replace(/^PO/, 'PR')
-  var folder = parent.createFolder(name);
-  ship = folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', name));
+  var prName = name.replace(/^PO/, 'PR');
+  var folder = parent.createFolder(prName);
+  ship = folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', prName));
 
   var tech = ship.createFolder(
-    Utilities.formatString('%s - %s', 'TECH', name));
+    Utilities.formatString('%s - %s', 'TECH', prName));
 
   tech.createFolder('DWG 图纸');
   tech.createFolder('QC Picture 出货图片报告');
@@ -116,10 +116,14 @@ function cmdConfirmOrder(message) {
 
       // insert new row
       spreadsheet.insertRowBefore(2);
-      var cell = spreadsheet.getRange(2, 1).getCell();
 
       // populate the first cell with the file ID
+      var cell = spreadsheet.getRange(2, 1).getCell();
       cell.setValue(file.getID());
+
+      // populate the remaining cells using the importrange function
+      cell = spreadsheet.getRange(2, 2).getCell();
+      cell.setValue('=importrange(A2,"Production Order!A1:N1")');
     }
   }
 }
