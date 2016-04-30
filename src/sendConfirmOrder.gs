@@ -1,4 +1,21 @@
-// Version 1.1.0
+// Version 1.2.0
+
+var PRODUCTION_EMAIL = 'production@example.com';
+
+/*
+ * Sends a command to the production email.
+ *
+ * @param command: name of the command
+ * @type  command: String
+ * @param message: body of the command email
+ * @type  message: String
+ */
+function sendCommand(command, message) {
+  GmailApp.sendEmail(
+    PRODUCTION_EMAIL, 
+    Utilities.formatString('CMD - %s', command), 
+    message);
+}
 
 /*
  * Gets range of cells by name.
@@ -88,6 +105,11 @@ function confirmOrder() {
   }
   
   // get information from the spreadsheet
+  var orderNum = getValue(spreadsheet, ui, 'orderNum', 'PO');
+  if (orderNum == null) {
+    return;
+  }
+
   var customerCode = getValue(spreadsheet, ui, 'customerCode', 'cID');
   if (customerCode == null) {
     return;
@@ -97,6 +119,8 @@ function confirmOrder() {
   if (projectName == null) {
     return;
   }
+  
+  var quoteCols = getRange(spreadsheet, ui, 'quote');
   
   // confirm dialog
   var confirm = ui.alert(
@@ -138,7 +162,10 @@ function confirmOrder() {
   
   // send command to production
   var body = Utilities.formatString('%s\n%s', name, file.getId());
-  GmailApp.sendEmail('production@example.com', 'CMD - Confirm Order', body);
+  sendCommand('Confirm Order', body);
+
+  // hide the quote columns
+  spreadsheet.hideColumn(quoteCols);
 }
 
 /*
