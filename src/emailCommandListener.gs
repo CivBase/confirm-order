@@ -31,7 +31,7 @@ function cmdConfirmOrder(message) {
   var body = message.getPlainBody().split('\n');
 
   // get/create parent folder
-  var parentName = '进行生产任务 Current Order';
+  var parentName = '0 Current Order';
   var parents = DriveApp.getFoldersByName(parentName);
   var parent;
   if (parents.hasNext()) {
