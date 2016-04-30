@@ -1,6 +1,24 @@
 // Version 1.1.0
 
 /*
+ * Gets range of cells by name.
+ *
+ * @param name: name of the range
+ * @type  name: String
+ * @return: the cell range
+ * @rtype: Range
+ */
+function getRange(spreadsheet, ui, name) {
+  var range = spreadsheet.getRangeByName(name);
+  if (range == null) {
+    ui.alert('Invalid order spreadsheet: missing named range "' + name + '".');
+    return null;
+  }
+
+  return range;
+}
+
+/*
  * Gets the value of a single-cell range.
  *
  * @param name: name of the range
@@ -11,15 +29,17 @@
  * @rtype: Object
  */
 function getValue(spreadsheet, ui, name, invalid) {
-  var range = spreadsheet.getRangeByName(name);
-  if (range == null) {
-    ui.alert('Invalid order spreadsheet: missing namned range "' + name + '".');
-    return null;
-  }
-  
-  var value = range.getValue();
+  var value = getRange(spreadsheet, ui, name).getValue();
   if (value === invalid || value == null) {
-    ui.alert('Invalid order spreadsheet: bad value for "' + name + '".');
+    instructions = ''
+    if (value === invalid) {
+      instructions = ' Please change the default value.'
+    }
+
+    ui.alert(
+      'Invalid order spreadsheet: bad value for "' + name + '".' + 
+      instructions);
+
     return null;
   }
   
@@ -41,6 +61,7 @@ function getValue(spreadsheet, ui, name, invalid) {
 function getName(orderNum, customerCode, projectName) {
   var originalName = Utilities.formatString(
     'PO %d %s %s', orderNum, customerCode, projectName);
+
   var name = originalName;
   var files = DriveApp.getFilesByName(name);
   
@@ -66,12 +87,7 @@ function confirmOrder() {
     return;
   }
   
-  // parse spreadsheet for info
-  var orderNum = getValue(spreadsheet, ui, 'orderNum', 'PO');
-  if (orderNum == null) {
-    return;
-  }
-  
+  // get information from the spreadsheet
   var customerCode = getValue(spreadsheet, ui, 'customerCode', 'cID');
   if (customerCode == null) {
     return;
@@ -123,4 +139,88 @@ function confirmOrder() {
   // send command to production
   var body = Utilities.formatString('%s\n%s', name, file.getId());
   GmailApp.sendEmail('production@example.com', 'CMD - Confirm Order', body);
+}
+
+/*
+ * Sends an quote to the customer via email and hides the quote columns.
+ */
+function emailQuote() {
+  var ui = SpreadsheetApp.getUi();
+  var spreadsheet = SpreadsheetApp.getActive();
+  if (spreadsheet == null) {
+    ui.alert('Invalid order spreadsheet: no active spreadsheet.');
+    return;
+  }
+  
+  // get information from the spreadsheet
+  var customerEmail = getValue(spreadsheet, ui, 'customerEmail', '');
+  if (customerEmail == null) {
+    return;
+  }
+
+  var date = getValue(spreadsheet, ui, 'date', 'Date');
+  if (date == null) {
+    return;
+  }
+  
+  var projectName = getValue(spreadsheet, ui, 'projectName', 'Keyword');
+  if (projectName == null) {
+    return;
+  }
+
+  var height = getValue(spreadsheet, ui, 'height', '');
+  if (height == null) {
+    return;
+  }
+
+  var width = getValue(spreadsheet, ui, 'width', '');
+  if (width == null) {
+    return;
+  }
+
+  var unit = getValue(spreadsheet, ui, 'unit', '');
+  if (unit == null) {
+    return;
+  }
+
+  var model = getValue(spreadsheet, ui, 'model', '');
+  if (model == null) {
+    return;
+  }
+
+  var quoteCols = getRange(spreadsheet, ui, 'quote');
+
+  // confirm dialog
+  var confirm = ui.alert(
+    'Please confirm', 
+    Utilities.formatString(
+      'Are you sure?  This document will be shared with %s.', customerEmail), 
+    ui.ButtonSet.YES_NO);
+  
+  if (confirm == ui.Button.NO) {
+    return;
+  }
+
+  // set the sharing to "anyone who has the link"
+  var file = DriveApp.getFileById(spreadsheet.getId());
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+  // send the email
+  var quote = Utilities.formatString(
+    '%s %sx%s %s %s', projectName, height, width, unit, model);
+
+  var body = Utilities.formatString(
+    'Dear valued customer,\n\nYour quote for %s is available at the following address:\n%s', 
+    quote, file.getUrl());
+
+  GmailApp.sendEmail(
+    customerEmail, 
+    Utilities.formatString(
+      'Quote %s %s', 
+      Utilities.formatDate(date, 'MDT', 'MM-dd-yy'), 
+      quote), 
+    body);
+
+  // hide the quote columns
+  spreadsheet.hideColumn(quoteCols);
 }

@@ -46,10 +46,14 @@ function cmdConfirmOrder(message) {
 
   // create order folder structure
   var name = body[0].replace(/\s$/, '');
+
+  var prName = name.replace(/^PO/, 'PR')
   var folder = parent.createFolder(name);
-  var tech = folder.createFolder(
+  ship = folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', name));
+
+  var tech = ship.createFolder(
     Utilities.formatString('%s - %s', 'TECH', name));
-  folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', name));
+
   tech.createFolder('DWG 图纸');
   tech.createFolder('QC Picture 出货图片报告');
   tech.createFolder('Software 电脑加载文件');
@@ -73,7 +77,7 @@ function cmdConfirmOrder(message) {
   }
 
   // create the PO file
-  var templateName = 'PO Template 模板测试';
+  var templateName = 'PO Template 模板';
   var templates = DriveApp.getFilesByName(templateName);
   if (!templates.hasNext()) {
     Logger.log(
@@ -110,29 +114,12 @@ function cmdConfirmOrder(message) {
       var schedule = schedules.next();
       var spreadsheet = SpreadsheetApp.open(schedule);
 
-      var rangeName = 'orderFileIds';
-      var range = spreadsheet.getRangeByName(rangeName);
-      if (range == null) {
-        Logger.log(
-          'ERROR: Could not find named range "%s". Skipping this step.', 
-          rangeName);
-      }
-      else {
-        var values = range.getValues();
-        var cellIndex = 0;
-        while (cellIndex < values.length && values[cellIndex][0] !== '') {
-          cellIndex++;
-        }
+      // insert new row
+      spreadsheet.insertRowBefore(2);
+      var cell = spreadsheet.getRange(2, 1).getCell();
 
-        if (cellIndex < values.length) {
-          var cell = range.getCell(cellIndex + 1, 1);
-          cell.setValue(file.getId());
-        }
-        else {
-          Logger.log(
-            'ERROR: No empty cells available in range "%s".', rangeName);
-        }
-      }
+      // populate the first cell with the file ID
+      cell.setValue(file.getID());
     }
   }
 }
