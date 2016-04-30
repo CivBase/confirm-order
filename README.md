@@ -152,4 +152,4 @@ Before the script can start executing, you must authorize the script by continui
 For the script to completely function, a few files and folders need to exist with the correct names in the production account's Google Drive.
 
 #### 14. Ensure all necessary files and folders are in place.
-The production Google Drive should include the documents `confirm order readme.txt`, `PO Template 模板`, and `齐博达订单进度 Schedule` in the root directory as well as the folder `进行生产任务 Current Order`.  The `PO Template 模板` file must be a Google Sheet which contains the named cell range `orderFileId`.  The `齐博达订单进度 Schedule` file must be a Google Sheet which contains the named cell range `orderFileIds`.
+The production Google Drive should include the documents `confirm order readme.txt`, `PO Template 模板`, and `齐博达订单进度 Schedule` in the root directory as well as the folder `0 Current Order`.  The `PO Template 模板` file must be a Google Sheet which contains the named cell range `orderFileId`.  The `齐博达订单进度 Schedule` file must be a Google Sheet which contains the named cell range `orderFileIds`.
