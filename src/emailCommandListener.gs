@@ -1,4 +1,4 @@
-// Version 1.2.0
+// Version 1.2.1
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
@@ -118,11 +118,11 @@ function cmdConfirmOrder(message) {
       spreadsheet.insertRowBefore(2);
 
       // populate the first cell with the file ID
-      var cell = spreadsheet.getRange(2, 1).getCell();
-      cell.setValue(file.getID());
+      var cell = spreadsheet.getRange("A2").getCell(1, 1);
+      cell.setValue(file.getId());
 
       // populate the remaining cells using the importrange function
-      cell = spreadsheet.getRange(2, 2).getCell();
+      cell = spreadsheet.getRange("B2").getCell(1, 1);
       cell.setValue('=importrange(A2,"Production Order!A1:N1")');
     }
   }
