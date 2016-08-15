@@ -1,4 +1,4 @@
-// Version 1.2.2
+// Version 1.3.0
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
@@ -45,9 +45,9 @@ function cmdConfirmOrder(message) {
   }
 
   // create order folder structure
-  var name = body[0].replace(new RegExp(/\s$/), '');
+  var name = body[0].replace(/\s$/, '');
 
-  var prName = name.replace(new RegExp(/^PO/), 'PR');
+  var prName = name.replace(/^PO/, 'PR');
   var folder = parent.createFolder(prName);
   ship = folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', prName));
 
