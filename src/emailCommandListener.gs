@@ -31,7 +31,7 @@ function cmdConfirmOrder(message) {
   var body = message.getPlainBody().split('\n');
 
   // get/create parent folder
-  var parentName = '0 Current Order';
+  var parentName = '进行生产任务 Current Order';
   var parents = DriveApp.getFoldersByName(parentName);
   var parent;
   if (parents.hasNext()) {
@@ -45,9 +45,9 @@ function cmdConfirmOrder(message) {
   }
 
   // create order folder structure
-  var name = body[0].replace(/\s$/, '');
+  var name = body[0].replace(new RegExp(/\s$/), '');
 
-  var prName = name.replace(/^PO/, 'PR');
+  var prName = name.replace(new RegExp(/^PO/), 'PR');
   var folder = parent.createFolder(prName);
   ship = folder.createFolder(Utilities.formatString('%s - %s', 'SHIP', prName));
 
@@ -77,7 +77,7 @@ function cmdConfirmOrder(message) {
   }
 
   // create the PO file
-  var templateName = 'PO Template 模板';
+  var templateName = 'PR Template 模板';
   var templates = DriveApp.getFilesByName(templateName);
   if (!templates.hasNext()) {
     Logger.log(
@@ -86,7 +86,7 @@ function cmdConfirmOrder(message) {
   }
   else {
     var template = templates.next();
-    var file = template.makeCopy(name, folder);
+    var file = template.makeCopy(prName, folder);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
     var spreadsheet = SpreadsheetApp.open(file);
 
@@ -113,17 +113,26 @@ function cmdConfirmOrder(message) {
     else {
       var schedule = schedules.next();
       var spreadsheet = SpreadsheetApp.open(schedule);
+      var sheetName = 'current';
+      var sheet = spreadsheet.getSheetByName(sheetName);
 
-      // insert new row
-      spreadsheet.insertRowBefore(2);
+      if (sheet == null) {
+        Logger.log(
+          'ERROR: Could not find a sheet named "%s". Skipping this step.',
+          sheetName);
+      }
+      else {
+        // insert new row
+        sheet.insertRowBefore(2);
 
-      // populate the first cell with the file ID
-      var cell = spreadsheet.getRange("A2").getCell(1, 1);
-      cell.setValue(file.getId());
+        // populate the first cell with the file ID
+        var cell = sheet.getRange('A2').getCell(1, 1);
+        cell.setValue(file.getId());
 
-      // populate the remaining cells using the importrange function
-      cell = spreadsheet.getRange("B2").getCell(1, 1);
-      cell.setValue('=importrange(A2,"Production Order!A1:N1")');
+        // populate the remaining cells using the importrange function
+        cell = sheet.getRange('B2').getCell(1, 1);
+        cell.setValue('=importrange(A2,"Production Order!A1:N1")');
+      }
     }
   }
 }
