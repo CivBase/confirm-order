@@ -118,7 +118,7 @@ function cmdConfirmOrder(message) {
 
       if (sheet == null) {
         Logger.log(
-          'ERROR: Could not find a sheet named "%s". Skipping this step.',
+          'ERROR: Could not find a sheet named "%s". Skipping this step.', 
           sheetName);
       }
       else {
