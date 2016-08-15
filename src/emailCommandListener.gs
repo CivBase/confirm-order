@@ -1,4 +1,4 @@
-// Version 1.2.1
+// Version 1.2.2
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
