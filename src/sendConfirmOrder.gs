@@ -1,4 +1,4 @@
-// Version 1.3.0
+// Version 1.3.1
 
 var PRODUCTION_EMAIL = 'production@example.com';
 
@@ -46,8 +46,9 @@ function getRange(spreadsheet, ui, name) {
  * @rtype: Object
  */
 function getValue(spreadsheet, ui, name, invalid) {
-  var value = getRange(spreadsheet, ui, name).getValue();
-  if (value === invalid || value == null) {
+  var range = getRange(spreadsheet, ui, name);
+  var value = range.getValue();
+  if (value === invalid || value == null || range.getCell(1, 1).isBlank()) {
     instructions = ''
     if (value === invalid) {
       instructions = ' Please change the default value.'
