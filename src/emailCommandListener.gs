@@ -123,7 +123,7 @@ function cmdConfirmOrder(message) {
       }
       else {
         // determine the last populated row
-        var range = sheet.getRange('A2:B')
+        var range = sheet.getRange('A2:B');
         lastRow = range.getHeight();
         for (var i = range.getHeight(); i > 0; i--) {
           if (range.getCell(i, 1).getValue() != null) {
@@ -138,6 +138,8 @@ function cmdConfirmOrder(message) {
         }
 
         lastRow++;
+        sheet.insertRowAfter(lastRow);
+        var range = sheet.getRange('A2:B');
 
         // populate the first cell with the file ID
         var cell = range.getCell(lastRow, 1);

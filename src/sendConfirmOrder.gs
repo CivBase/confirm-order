@@ -120,6 +120,11 @@ function confirmOrder() {
     return;
   }
 
+  var port = getValue(spreadsheet, ui, 'port', '');
+  if (port == null) {
+    return;
+  }
+
   var quoteCols = getRange(spreadsheet, ui, 'quote');
   var orderValues = getRange(spreadsheet, ui, 'saveOnConfirm');
   var orderNumRange = getRange(spreadsheet, ui, 'orderNum');
