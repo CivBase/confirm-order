@@ -1,4 +1,4 @@
-// Version 1.4.3
+// Version 1.4.4
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
@@ -134,7 +134,7 @@ function cmdConfirmOrder(message) {
 
         // populate the remaining cells using the importrange function
         cell = range.getCell(lastRow, 2);
-        cell.setValue('=importrange(A' + lastRow + ',"Production Order!A1:N1")');
+        cell.setValue('=importrange(A' + lastRow + ',"Production Order!D1:Q1")');
       }
     }
   }
