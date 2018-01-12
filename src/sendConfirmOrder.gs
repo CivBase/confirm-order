@@ -1,4 +1,4 @@
-// Version 1.4.0
+// Version 1.4.1
 
 var PRODUCTION_EMAIL = 'production@example.com';
 
@@ -100,7 +100,8 @@ function getName(orderNum, customerCode, projectName) {
 function confirmOrder() {
   var ui = SpreadsheetApp.getUi();
   var spreadsheet = SpreadsheetApp.getActive();
-  spreadsheet.setName('order1');
+  var sheet = spreadsheet.getActiveSheet();
+  sheet.setName('order1');
   if (spreadsheet == null) {
     ui.alert('Invalid order spreadsheet: no active spreadsheet.');
     return;
