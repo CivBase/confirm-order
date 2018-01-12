@@ -1,4 +1,4 @@
-// Version 1.4.1
+// Version 1.4.2
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
@@ -123,23 +123,10 @@ function cmdConfirmOrder(message) {
       }
       else {
         // determine the last populated row
-        var range = sheet.getRange('A2:B');
-        lastRow = range.getHeight();
-        for (var i = range.getHeight(); i > 0; i--) {
-          if (range.getCell(i, 1).isBlank()) {
-            lastRow = i;
-            break;
-          }
-
-          if (range.getCell(i, 2).isBlank()) {
-            lastRow = i;
-            break;
-          }
-        }
-
-        lastRow++;
+        var lastRow = sheet.getRange('A').getHeight();
         sheet.insertRowAfter(lastRow);
-        var range = sheet.getRange('A2:B');
+        var range = sheet.getRange('A:B');
+        lastRow = range.getHeight();
 
         // populate the first cell with the file ID
         var cell = range.getCell(lastRow, 1);
@@ -147,7 +134,7 @@ function cmdConfirmOrder(message) {
 
         // populate the remaining cells using the importrange function
         cell = range.getCell(lastRow, 2);
-        cell.setValue('=importrange(A' + (lastRow + 1) + ',"Production Order!A1:N1")');
+        cell.setValue('=importrange(A' + lastRow + ',"Production Order!A1:N1")');
       }
     }
   }
