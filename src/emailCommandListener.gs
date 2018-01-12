@@ -126,14 +126,12 @@ function cmdConfirmOrder(message) {
         var range = sheet.getRange('A2:B');
         lastRow = range.getHeight();
         for (var i = range.getHeight(); i > 0; i--) {
-          var value = range.getCell(i, 1).getValue();
-          if (value != null && value != '') {
+          if (range.getCell(i, 1).isBlank()) {
             lastRow = i;
             break;
           }
 
-          value = range.getCell(i, 2).getValue() != null;
-          if (value != null && value != '') {
+          if (range.getCell(i, 2).isBlank()) {
             lastRow = i;
             break;
           }
@@ -149,7 +147,7 @@ function cmdConfirmOrder(message) {
 
         // populate the remaining cells using the importrange function
         cell = range.getCell(lastRow, 2);
-        cell.setValue('=importrange(A' + lastRow + ',"Production Order!A1:N1")');
+        cell.setValue('=importrange(A' + (lastRow + 1) + ',"Production Order!A1:N1")');
       }
     }
   }
