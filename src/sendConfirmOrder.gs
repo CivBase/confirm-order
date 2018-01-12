@@ -121,6 +121,8 @@ function confirmOrder() {
   }
 
   var quoteCols = getRange(spreadsheet, ui, 'quote');
+  var orderValues = getRange(spreadsheet, ui, 'saveOnConfirm');
+  var orderNumRange = getRange(spreadsheet, ui, 'orderNum');
   
   // confirm dialog
   var confirm = ui.alert(
@@ -166,6 +168,19 @@ function confirmOrder() {
 
   // hide the quote columns
   spreadsheet.hideColumn(quoteCols);
+
+  // save the order values
+  var cell = null;
+  for (var i = 1; i <= orderValues.getHeight(); i++) {
+    for (var j = 1; j <= orderValues.getWidth(); j++) {
+      cell = orderValues.getCell(i, j);
+      cell.setValue(cell.getValue());
+    }
+  }
+
+  // save the order number
+  cell = orderNumRange.getCell(1, 1);
+  cell.setValue(cell.getValue());
 }
 
 /*

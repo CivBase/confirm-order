@@ -122,16 +122,30 @@ function cmdConfirmOrder(message) {
           sheetName);
       }
       else {
-        // insert new row
-        sheet.insertRowBefore(2);
+        // determine the last populated row
+        var range = sheet.getRange('A2:B')
+        lastRow = range.getHeight();
+        for (var i = range.getHeight(); i > 0; i--) {
+          if (range.getCell(i, 1).getValue() != null) {
+            lastRow = i;
+            break;
+          }
+
+          if (range.getCell(i, 2).getValue() != null) {
+            lastRow = i;
+            break;
+          }
+        }
+
+        lastRow++;
 
         // populate the first cell with the file ID
-        var cell = sheet.getRange('A2').getCell(1, 1);
+        var cell = range.getCell(lastRow, 1);
         cell.setValue(file.getId());
 
         // populate the remaining cells using the importrange function
-        cell = sheet.getRange('B2').getCell(1, 1);
-        cell.setValue('=importrange(A2,"Production Order!A1:N1")');
+        cell = range.getCell(lastRow, 1);
+        cell.setValue('=importrange(A' + lastRow + ',"Production Order!A1:N1")');
       }
     }
   }
