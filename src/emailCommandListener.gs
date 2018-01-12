@@ -1,4 +1,4 @@
-// Version 1.4.2
+// Version 1.4.3
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
@@ -123,7 +123,7 @@ function cmdConfirmOrder(message) {
       }
       else {
         // determine the last populated row
-        var lastRow = sheet.getRange('A').getHeight();
+        var lastRow = sheet.getRange('A:B').getHeight();
         sheet.insertRowAfter(lastRow);
         var range = sheet.getRange('A:B');
         lastRow = range.getHeight();
