@@ -1,4 +1,4 @@
-// Version 1.3.0
+// Version 1.4.0
 
 /*
  * Retrieves a label by name if it exists.  Otherwise, creates and returns a 
@@ -54,9 +54,9 @@ function cmdConfirmOrder(message) {
   var tech = ship.createFolder(
     Utilities.formatString('%s - %s', 'TECH', prName));
 
-  tech.createFolder('DWG 图纸');
-  tech.createFolder('QC Picture 出货图片报告');
-  tech.createFolder('Software 电脑加载文件');
+  tech.createFolder(prName + ' DWG 图纸');
+  tech.createFolder(prName + ' QC Picture 出货图片报告');
+  tech.createFolder(prName + ' Software 电脑加载文件');
 
   // copy readme
   var readmeName = 'current order readme.txt';
