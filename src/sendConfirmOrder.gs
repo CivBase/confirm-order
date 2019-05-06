@@ -1,4 +1,4 @@
-// Version 1.4.1
+// Version 1.5.0
 
 var PRODUCTION_EMAIL = 'production@example.com';
 
@@ -65,6 +65,18 @@ function getValue(spreadsheet, ui, name, invalid) {
 }
 
 /*
+ * Sets the value of a single-cell range.
+ *
+ * @param name: name of the range
+ * @type  name: String
+ * @param value: new value for the cell
+ * @type  value: String
+ */
+function setValue(spreadsheet, ui, name, value) {
+  getRange(spreadsheet, ui, name).setValue(value);
+}
+
+/*
  * Generates a name based on information derived from the spreadsheet.
  *
  * @param orderNum: identification number associated with the order
@@ -128,6 +140,11 @@ function confirmOrder() {
     return;
   }
 
+  var screenPrice = getValue(spreadsheet, ui, 'screenPrice', '');
+  if (screenPrice == null) {
+    return;
+  }
+
   var quoteCols = getRange(spreadsheet, ui, 'quote');
   var orderValues = getRange(spreadsheet, ui, 'saveOnConfirm');
   var orderNumRange = getRange(spreadsheet, ui, 'orderNum');
@@ -141,6 +158,9 @@ function confirmOrder() {
   if (confirm == ui.Button.NO) {
     return;
   }
+
+  // freeze the value of the screenPrice cell
+  setValue(spreadsheet, ui, 'screenPrice', screenPrice);
   
   // modify spreadsheet name and sharing
   var name = getName(orderNum, customerCode, projectName);
